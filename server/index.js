@@ -1,8 +1,14 @@
 import Fastify from 'fastify'
 import fastifyEnv from '@fastify/env'
+import userRoutes from './routes/user.routes'
 
 const fastify = Fastify({
-  logger: true,
+  logger: {
+    level: 'info',
+    transport: {
+      target: 'pino-pretty',
+    },
+  },
 })
 
 const schema = {
@@ -11,14 +17,14 @@ const schema = {
   properties: {
     PORT: {
       type: 'string',
-      default: process.env.PORT,
+      default: process.env.PORT || 3000,
     },
   },
 }
 const options = {
-  confKey: 'config', // optional, default: 'config'
+  confKey: 'config',
   schema,
-  data: process.env, // optional, default: process.env
+  data: process.env,
   dotenv: true,
 }
 const initialize = async () => {
@@ -26,13 +32,19 @@ const initialize = async () => {
   await fastify.after()
 }
 
-fastify.get('/', async (request, reply) => {
-  return { hello: 'world' }
-})
+// fastify.get('/', options, async (request, reply) => {
+//   request.log.info('Some info about the current request')
+//   reply.send({ hello: 'world' })
+// })
+fastify.register(userRoutes, { prefix: '/api/v1/users' })
+
 const start = async () => {
   try {
     await fastify.ready()
-    await fastify.listen(process.env.PORT, process.env.HOST)
+    fastify.listen({ port: process.env.PORT, host: process.env.HOST })
+    fastify.log.info(
+      `Server is running on port ${fastify.server.address().port}`,
+    )
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
