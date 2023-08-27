@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import fastifyEnv from '@fastify/env'
-import userRoutes from './routes/user.routes'
+import userRoutes from './routes/user.routes.js'
 
 const fastify = Fastify({
   logger: {
@@ -41,7 +41,7 @@ fastify.register(userRoutes, { prefix: '/api/v1/users' })
 const start = async () => {
   try {
     await fastify.ready()
-    fastify.listen({ port: process.env.PORT, host: process.env.HOST })
+    await fastify.listen({ port: process.env.PORT, host: process.env.HOST })
     fastify.log.info(
       `Server is running on port ${fastify.server.address().port}`,
     )
