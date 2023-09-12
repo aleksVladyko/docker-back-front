@@ -1,1 +1,4 @@
 .eslintrc.json
+/build/
+/test-config/
+.vscode

@@ -1,6 +1,7 @@
-// import User from '../models/user.model.js'
+import User from '../models/user.model.js'
 
 async function getAllUsers(request, reply) {
+  const users = await User.find()
   try {
     reply.send('Not implemented yet')
   } catch (error) {
@@ -8,6 +9,7 @@ async function getAllUsers(request, reply) {
   }
 }
 async function getUserById(request, reply) {
+  const user = await User.findById(req.params.id)
   try {
     reply.send('Not implemented yet')
   } catch (error) {
