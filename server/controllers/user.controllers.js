@@ -1,39 +1,45 @@
 import User from '../models/user.model.js'
 
-async function getAllUsers(request, reply) {
-  const users = await User.find()
+async function getAllUsers(req, reply) {
   try {
-    reply.send('Not implemented yet')
+    const users = await User.find()
+    reply.send(users)
   } catch (error) {
     reply.status(500).send()
   }
 }
-async function getUserById(request, reply) {
-  const user = await User.findById(req.params.id)
+async function getUserById(req, reply) {
   try {
-    reply.send('Not implemented yet')
+    const user = await User.findById(req.params.id)
+    reply.send(user)
   } catch (error) {
     reply.status(500).send()
   }
 }
-async function createUser(request, reply) {
+async function createUser(req, reply) {
   try {
-    reply.send('Not implemented yet')
+    const user = new User(req.body)
+    const result = await user.save()
+    reply.send(result)
   } catch (error) {
     reply.status(500).send()
   }
 }
-async function updateUser(request, reply) {
+async function updateUser(req, reply) {
   try {
-    reply.send('Not implemented yet')
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    })
+    reply.send(user)
   } catch (error) {
     reply.status(500).send()
   }
 }
 
-async function deleteUser(request, reply) {
+async function deleteUser(req, reply) {
   try {
-    reply.send('Not implemented yet')
+    await User.findByIdAndDelete(req.params.id)
+    reply.status(203).send('')
   } catch (error) {
     reply.status(500).send()
   }
